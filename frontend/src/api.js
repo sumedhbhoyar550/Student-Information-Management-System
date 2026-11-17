@@ -1,4 +1,4 @@
-export const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/+$/, '');
+export const API_URL = (import.meta.env.VITE_API_URL || 'https://campus-desk-api-mx62.onrender.com').replace(/\/+$/, '');
 
 export async function request(path, options = {}) {
   let response;
