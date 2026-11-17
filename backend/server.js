@@ -54,7 +54,7 @@ app.use((error, _request, response, _next) => {
     return response.status(413).json({ success: false, message: 'Request body is too large.' });
   }
   console.error('Unhandled API error:', error);
-  return response.status(500).json({ success: false, message: 'An unexpected server error occurred.' });
+  return response.status(500).json({ success: false, message: error.message || 'An unexpected server error occurred.' });
 });
 
 const server = app.listen(port, '0.0.0.0', () => {
