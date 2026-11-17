@@ -7,8 +7,6 @@ import { connectDatabase } from './config/database.js';
 import { seedDefaultDepartments } from './controllers/departmentController.js';
 import studentRoutes from './routes/studentRoutes.js';
 import departmentRoutes from './routes/departmentRoutes.js';
-import dns from 'node:dns';
-dns.setServers(['1.1.1.1', '8.8.8.8']);
 
 const app = express();
 const port = Number(process.env.PORT) || 5000;
@@ -59,13 +57,12 @@ app.use((error, _request, response, _next) => {
   return response.status(500).json({ success: false, message: 'An unexpected server error occurred.' });
 });
 
-async function start() {
-  await connectDatabase();
-  await seedDefaultDepartments();
-  app.listen(port, () => console.log(`Student API listening on port ${port}`));
-}
-
-start().catch((error) => {
-  console.error('Unable to start the student API:', error.message);
-  process.exitCode = 1;
+const server = app.listen(port, '0.0.0.0', () => {
+  console.log(`Student API listening on port ${port}`);
 });
+
+connectDatabase()
+  .then(() => seedDefaultDepartments())
+  .catch((error) => {
+    console.error('Database connection warning:', error.message);
+  });
